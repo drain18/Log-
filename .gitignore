@@ -28,3 +28,6 @@ Thumbs.db
 .idea/
 .vscode/*
 !.vscode/launch.json
+
+# Ignore my design assets and PDF proposals
+proposal_designs/

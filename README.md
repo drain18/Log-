@@ -1,88 +1,58 @@
-<!--
-  This is your project's front page. Replace every placeholder below.
-  It is the first thing your instructor and any future employer will read, and
-  the live link in it is how your project gets opened for grading.
+# Log!
 
-  New here? Read START-HERE.md first. Delete this comment when you are done.
--->
+> Your personal virtual voice diary; for anyone who can't be bothered to write or type it.
 
-# App Name
-
-> One sentence: what this app does, and who it is for.
-
-**Live demo:** https://drain18.github.io/Log-/ <!-- GitHub Pages is set up already; replace if you host elsewhere -->
+**Live demo:** https://drain18.github.io/Log/
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
-**Author:** Your Name
-
-This repository lives in the author's own GitHub account and is public on
-purpose. There is no `student.json` here and there should not be one: see
-`docs/06-security-and-privacy.md` for what a public repo means for secrets and
-personal data.
+**Author:** drain18
 
 ---
 
 ## Screenshots
 
-Put two or three real screenshots at phone size in `docs/assets/`, then replace
-this paragraph with them:
-
-```markdown
-| Home | Detail | Add |
+| Home | Reading your Entry | Add an Entry |
 | --- | --- | --- |
-| ![Home](docs/assets/screen-home.png) | ![Detail](docs/assets/screen-detail.png) | ![Add](docs/assets/screen-add.png) |
-```
-
-A repo without screenshots reads as abandoned, whatever the code says.
+| ![Home](docs/assets/log-home.png) | ![Detail](docs/assets/read-entry.png) | ![Add](docs/assets/record-entry.png) |
 
 ## What it does
 
-Three to five bullets. What can a user actually do?
-
-- ...
-- ...
-- ...
+- View your current journal entries with a streak counter on an interactive calendar. 
+- Record, view, and edit your diary entries with speech support or fallback text input. 
+- AI-powered summarization to condense your journal entries. 
 
 ## Built with
 
-| | |
-| --- | --- |
-| Framework | Flutter (Dart) |
-| State | `setState` / provider / riverpod (say which) |
-| Storage | shared_preferences / Hive / Drift / Firebase / Supabase / other |
-| Other packages | list the ones that matter, with a word on why |
+| | | |
+| --- | --- | --- |
+| Framework | Flutter (Dart 3.8+) |
+| State | `setState` & local service state |
+| Storage | `shared_preferences` (local key-value JSON persistence) |
+| Other packages | `device_preview` (UI responsiveness preview), `table_calendar` (calendar view) |
 
 ## Running it yourself
 
 ```bash
 flutter pub get
-cp .env.example .env      # only if your app needs keys, see below
+cp .env.example .env      # Set up your Gemini API key
 flutter run -d web-server --web-port 8080
 ```
 
-Then open http://localhost:8080. Requires Flutter (run `flutter --version` and
-put yours here).
+Then open http://localhost:8080. Requires Flutter (tested with Flutter SDK ^3.8.0).
 
 ### Environment variables
 
-This project reads its configuration from a `.env` file that is **not** in the
-repository. Copy `.env.example`, fill in your own values, and never commit the
-result.
+This project reads its configuration from a `.env` file that is **not** in the repository. Copy `.env.example`, fill in your own values, and never commit the result.
 
 | Variable | What it is | Where to get one |
 | --- | --- | --- |
-| `EXAMPLE_API_KEY` | ... | ... |
+| `GEMINI_API_KEY` | Google Gemini API key for journal summarization | [Google AI Studio](https://aistudio.google.com/) |
 
 ## Privacy and secrets
 
-Required section. Two or three honest sentences:
-
-- What personal data this app stores, if any, and where it goes.
-- Where the secrets live (`.env` locally, repository secrets in the deploy
-  workflow) and what protects the data on the service side (Firestore rules,
-  Supabase RLS, or "nothing leaves the device").
-- Confirm that all sample data, screenshots and the video contain **no real
-  personal information**.
+- **Data Storage:** All journal entries, transcripts, and summaries are stored strictly on-device using local `shared_preferences`. No personal diary data is sent to external servers except anonymized text sent to the Gemini API solely for summarization when requested.
+- **Secrets Management:** API keys reside locally in `.env` (ignored by git) and are excluded from version control.
+- **Compliance:** All sample data and screenshots contain **no real personal information**.
 
 ## Project documentation
 
@@ -93,27 +63,23 @@ Required section. Two or three honest sentences:
 | [Design system](docs/03-design-system.md) | colors, type, spacing, components |
 | [Weekly reports](docs/04-weekly-reports.md) | what happened each week |
 | [Demo video](docs/05-demo-video.md) | the recording and what it shows |
-| [Start here](START-HERE.md) | how this repo works (delete once you have read it) |
+| [Start here](START-HERE.md) | how this repo works |
 | [Security and privacy](docs/06-security-and-privacy.md) | the checklist, filled in |
 
 ## Status and what is next
 
-Be honest. What works, what is half done, what you would build next. An honest
-"known issues" section reads better than a claim the reader disproves in thirty
-seconds.
+- **Working:** Phase 0 setup, local storage persistence model (`shared_preferences`), design system theme configuration, and device preview.
+- **In Progress / Next:** Phase 1 calendar & home page UI, Phase 2 voice recording integration, and Phase 3 Gemini AI integration.
 
 ## Credits
 
 - Packages: see `pubspec.yaml`
-- Assets, icons, 3D models, sounds: name the author and the licence for each
-- People who helped, and how
+- Assets, icons, and wireframes: Designed as part of 6ADET coursework.
 
 ## AI use
 
-If you used AI tools while building this, say so in a sentence or two and say
-where. Honest disclosure is the standard in this course and increasingly outside
-it.
+An `AI-USAGE.md` file is maintained in the repository to document AI assistance (via Claude and Agents), code generation, and debugging support used throughout the project lifecycle.
 
 ## Licence
 
-MIT, see [LICENSE](LICENSE). Change it if you want different terms.
+MIT, see [LICENSE](LICENSE).
