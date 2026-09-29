@@ -3,8 +3,11 @@
 > Your personal virtual voice diary; for anyone who can't be bothered to write or type it.
 
 **Live demo:** https://drain18.github.io/Log/
+
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
+
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
+
 **Author:** drain18
 
 ---
