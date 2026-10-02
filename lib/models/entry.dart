@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Entry {
   final String id;
   final DateTime date;
