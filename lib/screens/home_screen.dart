@@ -3,6 +3,8 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:final_project/models/entry.dart';
 import 'package:final_project/services/storage_service.dart';
 import 'package:final_project/widgets/primary_button.dart';
+import 'package:final_project/widgets/bottom_action_bar.dart';
+import 'package:final_project/screens/recorder_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -359,11 +361,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFF2D4B3E),
-        foregroundColor: Colors.white,
-        onPressed: _showAddEntryModal,
-        child: const Icon(Icons.mic),
+      bottomNavigationBar: BottomActionBar(
+        currentIndex: 0,
+        onCalendarTap: () {},
+        onRecordTap: () async {
+          final result = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const RecorderScreen()),
+          );
+          if (result == true) {
+            _loadEntries();
+          }
+        },
+        onSummarizeTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Select an entry to summarize.')),
+          );
+        },
       ),
     );
   }
