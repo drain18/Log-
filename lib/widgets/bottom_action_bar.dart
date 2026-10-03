@@ -60,7 +60,7 @@ class BottomActionBar extends StatelessWidget {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-    final color = isSelected ? Colors.white : const Color(0xFFF9F7F2);
+    const color = Colors.white;
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
