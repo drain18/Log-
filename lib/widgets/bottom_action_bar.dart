@@ -19,10 +19,10 @@ class BottomActionBar extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF2D4B3E),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 10,
             offset: const Offset(0, -4),
           ),
@@ -60,7 +60,7 @@ class BottomActionBar extends StatelessWidget {
     required bool isSelected,
     required VoidCallback onTap,
   }) {
-    final color = isSelected ? const Color(0xFF2D4B3E) : Colors.grey.shade600;
+    final color = isSelected ? Colors.white : const Color(0xFFF9F7F2);
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),

@@ -88,6 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return {'current': currentStreak, 'longest': longestStreak};
   }
 
+  String _getMonthName(int month) {
+    const months = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+    return months[month - 1];
+  }
+
   List<Entry> _getEntriesForDay(DateTime day) {
     return _allEntries.where((e) {
       return e.date.year == day.year &&
@@ -250,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFFF9F7F2),
         elevation: 0,
-        centerTitle: true,
+        titleSpacing: 16.0,
         title: const Text(
           'Log!',
           style: TextStyle(
@@ -273,38 +281,79 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Row(
-                                children: [
-                                  const Icon(Icons.local_fire_department, color: Color(0xFF2D4B3E), size: 28),
-                                  const SizedBox(width: 8),
-                                  Column(
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF9F7F2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text('Current', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                      const SizedBox(height: 4),
                                       Text('$currentStreak Days', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2D4B3E))),
                                     ],
                                   ),
-                                ],
+                                ),
                               ),
-                              Container(height: 30, width: 1, color: Colors.grey.shade300),
-                              Row(
-                                children: [
-                                  const Icon(Icons.military_tech, color: Color(0xFF8DAA91), size: 28),
-                                  const SizedBox(width: 8),
-                                  Column(
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF9F7F2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       const Text('Longest', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                      const SizedBox(height: 4),
                                       Text('$longestStreak Days', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2D4B3E))),
                                     ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                '${_getMonthName(_focusedDay.month)} ${_focusedDay.year}',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xFF2D4B3E),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.chevron_left, color: Color(0xFF2D4B3E)),
+                                    onPressed: () {
+                                      setState(() {
+                                        _focusedDay = DateTime(_focusedDay.year, _focusedDay.month - 1, 1);
+                                      });
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.chevron_right, color: Color(0xFF2D4B3E)),
+                                    onPressed: () {
+                                      setState(() {
+                                        _focusedDay = DateTime(_focusedDay.year, _focusedDay.month + 1, 1);
+                                      });
+                                    },
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          const Divider(height: 24),
+                          const SizedBox(height: 8),
                           TableCalendar(
                             firstDay: DateTime.utc(2023, 1, 1),
                             lastDay: DateTime.utc(2030, 12, 31),
@@ -333,7 +382,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             headerStyle: const HeaderStyle(
                               formatButtonVisible: false,
-                              titleCentered: true,
+                              leftChevronVisible: false,
+                              rightChevronVisible: false,
                             ),
                           ),
                         ],
