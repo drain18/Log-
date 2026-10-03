@@ -13,5 +13,3 @@ void main() {
     expect(find.text('Log!'), findsOneWidget);
   });
 }
-
-

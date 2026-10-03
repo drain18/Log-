@@ -1,10 +1,15 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:final_project/services/storage_service.dart';
 import 'package:final_project/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // Initialize storage service / optional spike check
+  final spikeSuccess = await StorageService.testStorage();
+  debugPrint('--- Storage Initialization Result: $spikeSuccess ---');
+
   runApp(
     DevicePreview(
       enabled: true,
@@ -38,7 +43,7 @@ class LogApp extends StatelessWidget {
           centerTitle: true,
           titleTextStyle: TextStyle(
             color: Color(0xFF2D4B3E),
-            fontSize: 28,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -32,35 +32,60 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  int _calculateStreak() {
-    if (_allEntries.isEmpty) return 0;
-    
+  Map<String, int> _calculateStreaks() {
+    if (_allEntries.isEmpty) return {'current': 0, 'longest': 0};
+
     final Set<String> entryDates = _allEntries
         .map((e) => "${e.date.year}-${e.date.month.toString().padLeft(2, '0')}-${e.date.day.toString().padLeft(2, '0')}")
         .toSet();
 
-    DateTime checkDate = DateTime.now();
-    String checkStr = "${checkDate.year}-${checkDate.month.toString().padLeft(2, '0')}-${checkDate.day.toString().padLeft(2, '0')}";
-
-    if (!entryDates.contains(checkStr)) {
-      checkDate = checkDate.subtract(const Duration(days: 1));
-      checkStr = "${checkDate.year}-${checkDate.month.toString().padLeft(2, '0')}-${checkDate.day.toString().padLeft(2, '0')}";
-      if (!entryDates.contains(checkStr)) {
-        return 0;
-      }
+    int currentStreak = 0;
+    DateTime tempDate = DateTime.now();
+    String tempStr = "${tempDate.year}-${tempDate.month.toString().padLeft(2, '0')}-${tempDate.day.toString().padLeft(2, '0')}";
+    
+    if (!entryDates.contains(tempStr)) {
+      tempDate = tempDate.subtract(const Duration(days: 1));
+      tempStr = "${tempDate.year}-${tempDate.month.toString().padLeft(2, '0')}-${tempDate.day.toString().padLeft(2, '0')}";
     }
 
-    int streak = 0;
     while (true) {
-      if (entryDates.contains(checkStr)) {
-        streak++;
-        checkDate = checkDate.subtract(const Duration(days: 1));
-        checkStr = "${checkDate.year}-${checkDate.month.toString().padLeft(2, '0')}-${checkDate.day.toString().padLeft(2, '0')}";
+      if (entryDates.contains(tempStr)) {
+        currentStreak++;
+        tempDate = tempDate.subtract(const Duration(days: 1));
+        tempStr = "${tempDate.year}-${tempDate.month.toString().padLeft(2, '0')}-${tempDate.day.toString().padLeft(2, '0')}";
       } else {
         break;
       }
     }
-    return streak;
+
+    List<DateTime> sortedDates = _allEntries
+        .map((e) => DateTime(e.date.year, e.date.month, e.date.day))
+        .toSet()
+        .toList();
+    sortedDates.sort();
+
+    int longestStreak = 0;
+    int runningStreak = 0;
+    DateTime? prevDate;
+
+    for (var date in sortedDates) {
+      if (prevDate == null) {
+        runningStreak = 1;
+      } else {
+        final diff = date.difference(prevDate).inDays;
+        if (diff == 1) {
+          runningStreak++;
+        } else if (diff > 1) {
+          runningStreak = 1;
+        }
+      }
+      prevDate = date;
+      if (runningStreak > longestStreak) {
+        longestStreak = runningStreak;
+      }
+    }
+
+    return {'current': currentStreak, 'longest': longestStreak};
   }
 
   List<Entry> _getEntriesForDay(DateTime day) {
@@ -216,7 +241,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final selectedEntries = _getEntriesForDay(_selectedDay);
-    final streak = _calculateStreak();
+    final streaks = _calculateStreaks();
+    final currentStreak = streaks['current'] ?? 0;
+    final longestStreak = streaks['longest'] ?? 0;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF9F7F2),
@@ -237,65 +264,79 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Column(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF2D4B3E),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.local_fire_department, color: Color(0xFF8DAA91), size: 32),
-                        const SizedBox(width: 12),
-                        Text(
-                          '$streak Day Streak!',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                   Card(
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                     color: Colors.white,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TableCalendar(
-                        firstDay: DateTime.utc(2023, 1, 1),
-                        lastDay: DateTime.utc(2030, 12, 31),
-                        focusedDay: _focusedDay,
-                        selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                        onDaySelected: (selectedDay, focusedDay) {
-                          setState(() {
-                            _selectedDay = selectedDay;
-                            _focusedDay = focusedDay;
-                          });
-                        },
-                        eventLoader: _getEntriesForDay,
-                        calendarStyle: const CalendarStyle(
-                          todayDecoration: BoxDecoration(
-                            color: Color(0xFF8DAA91),
-                            shape: BoxShape.circle,
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Row(
+                                children: [
+                                  const Icon(Icons.local_fire_department, color: Color(0xFF2D4B3E), size: 28),
+                                  const SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Current', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                      Text('$currentStreak Days', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2D4B3E))),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Container(height: 30, width: 1, color: Colors.grey.shade300),
+                              Row(
+                                children: [
+                                  const Icon(Icons.military_tech, color: Color(0xFF8DAA91), size: 28),
+                                  const SizedBox(width: 8),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      const Text('Longest', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                                      Text('$longestStreak Days', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Color(0xFF2D4B3E))),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          selectedDecoration: BoxDecoration(
-                            color: Color(0xFF2D4B3E),
-                            shape: BoxShape.circle,
+                          const Divider(height: 24),
+                          TableCalendar(
+                            firstDay: DateTime.utc(2023, 1, 1),
+                            lastDay: DateTime.utc(2030, 12, 31),
+                            focusedDay: _focusedDay,
+                            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                            onDaySelected: (selectedDay, focusedDay) {
+                              setState(() {
+                                _selectedDay = selectedDay;
+                                _focusedDay = focusedDay;
+                              });
+                            },
+                            eventLoader: _getEntriesForDay,
+                            calendarStyle: const CalendarStyle(
+                              todayDecoration: BoxDecoration(
+                                color: Color(0xFF8DAA91),
+                                shape: BoxShape.circle,
+                              ),
+                              selectedDecoration: BoxDecoration(
+                                color: Color(0xFF2D4B3E),
+                                shape: BoxShape.circle,
+                              ),
+                              markerDecoration: BoxDecoration(
+                                color: Color(0xFF2D4B3E),
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                            headerStyle: const HeaderStyle(
+                              formatButtonVisible: false,
+                              titleCentered: true,
+                            ),
                           ),
-                          markerDecoration: BoxDecoration(
-                            color: Color(0xFF2D4B3E),
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        headerStyle: const HeaderStyle(
-                          formatButtonVisible: false,
-                          titleCentered: true,
-                        ),
+                        ],
                       ),
                     ),
                   ),
@@ -382,4 +423,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

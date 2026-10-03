@@ -20,7 +20,7 @@ than what you did instead. For each one: what it gave you, what was wrong with
 it, what you did instead, and the commit link.
 
 This section is worth real points because it is the hard part. Taking good code
-is not a skill. Catching bad code is. If you write that the AI was never wrong,
+is not a skill. Catching bad code is. If you write th   
 this section scores zero, so do not be tempted.
 
 ### 3. Who wrote what (30 points)

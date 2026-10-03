@@ -2,12 +2,9 @@
 
 > Your personal virtual voice diary; for anyone who can't be bothered to write or type it.
 
-**Live demo:** https://drain18.github.io/Log-/
-
+**Live demo:** https://drain18.github.io/Log/
 **Demo video:** `docs/demo.mp4` (link it here once it exists)
-
 **Course:** Applications Development and Emerging Technologies (6ADET), Holy Angel University
-
 **Author:** drain18
 
 ---
@@ -54,7 +51,7 @@ This project reads its configuration from a `.env` file that is **not** in the r
 ## Privacy and secrets
 
 - **Data Storage:** All journal entries, transcripts, and summaries are stored strictly on-device using local `shared_preferences`. No personal diary data is sent to external servers except anonymized text sent to the Gemini API solely for summarization when requested.
-- **Secrets Management:** API keys reside locally in `.env` (ignored by git) and are excluded from version control.
+- **Secrets Management:** API keys reside locally in `.env` (ignored by git) and are excluded from version control. 
 - **Compliance:** All sample data and screenshots contain **no real personal information**.
 
 ## Project documentation

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:final_project/models/entry.dart';
 import 'package:final_project/services/storage_service.dart';
-import 'package:final_project/widgets/primary_button.dart';
 
 class RecorderScreen extends StatefulWidget {
   const RecorderScreen({super.key});
@@ -15,7 +14,6 @@ class _RecorderScreenState extends State<RecorderScreen> {
   late stt.SpeechToText _speech;
   bool _isListening = false;
   String _transcript = '';
-  double _confidence = 1.0;
 
   @override
   void initState() {
@@ -34,9 +32,6 @@ class _RecorderScreenState extends State<RecorderScreen> {
       _speech.listen(
         onResult: (val) => setState(() {
           _transcript = val.recognizedWords;
-          if (val.hasConfidenceRating && val.confidence > 0) {
-            _confidence = val.confidence;
-          }
         }),
       );
     } else {
