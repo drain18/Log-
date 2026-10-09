@@ -4,6 +4,7 @@ class Entry {
   final String text;
   final String? audioPath;
   final String? summary;
+  final String? title;
 
   Entry({
     required this.id,
@@ -11,6 +12,7 @@ class Entry {
     required this.text,
     this.audioPath,
     this.summary,
+    this.title,
   });
 
   Map<String, dynamic> toJson() => {
@@ -19,6 +21,7 @@ class Entry {
         'text': text,
         'audioPath': audioPath,
         'summary': summary,
+        'title': title,
       };
 
   factory Entry.fromJson(Map<String, dynamic> json) => Entry(
@@ -27,12 +30,14 @@ class Entry {
         text: json['text'],
         audioPath: json['audioPath'],
         summary: json['summary'],
+        title: json['title'],
       );
 
   Entry copyWith({
     String? text,
     String? audioPath,
     String? summary,
+    String? title,
   }) {
     return Entry(
       id: id,
@@ -40,6 +45,7 @@ class Entry {
       text: text ?? this.text,
       audioPath: audioPath ?? this.audioPath,
       summary: summary ?? this.summary,
+      title: title ?? this.title,
     );
   }
 }
