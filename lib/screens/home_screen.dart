@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     id: DateTime.now().millisecondsSinceEpoch.toString(),
                     date: _selectedDay,
                     text: textController.text.trim(),
-                    summary: 'Auto-summary: ${textController.text.trim().split(' ').take(5).join(' ')}...',
+                    summary: null,
                   );
                   await StorageService.addEntry(newEntry);
                   if (!mounted) return;

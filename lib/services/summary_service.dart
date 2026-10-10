@@ -1,14 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SummaryService {
-  // Read API key from compile-time environment or fallback
-  static const String _apiKey = String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+  // Read API key from flutter_dotenv or compile-time environment fallback
+  static String get _apiKey {
+    try {
+      final envKey = dotenv.env['GEMINI_API_KEY'];
+      if (envKey != null && envKey.isNotEmpty) {
+        return envKey;
+      }
+    } catch (_) {}
+    return const String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+  }
 
   static Future<String> summarize(String entryText, {String? apiKey}) async {
     final key = apiKey ?? _apiKey;
     if (key.isEmpty) {
-      throw Exception('Gemini API key is not configured. Please set GEMINI_API_KEY.');
+      throw Exception('Gemini API key is not configured. Please set GEMINI_API_KEY in your .env file.');
     }
 
     if (entryText.trim().isEmpty) {

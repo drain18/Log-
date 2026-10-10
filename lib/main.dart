@@ -1,12 +1,20 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:final_project/services/storage_service.dart';
 import 'package:final_project/screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // Load environment variables from .env file
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint('Warning: .env file not found or failed to load: $e');
+  }
+
   // Initialize storage service / optional spike check
   final spikeSuccess = await StorageService.testStorage();
   debugPrint('--- Storage Initialization Result: $spikeSuccess ---');
