@@ -25,7 +25,7 @@ class SummaryService {
     }
 
     final url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=$key',
+      'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=$key',
     );
 
     final response = await http.post(
