@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -8,10 +9,17 @@ class SummaryService {
     try {
       final envKey = dotenv.env['GEMINI_API_KEY'];
       if (envKey != null && envKey.isNotEmpty) {
+        debugPrint('--- SummaryService: Loaded GEMINI_API_KEY from dotenv (${envKey.substring(0, 4)}...) ---');
         return envKey;
       }
-    } catch (_) {}
-    return const String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+    } catch (e) {
+      debugPrint('--- SummaryService: Error reading dotenv: $e ---');
+    }
+    const fallback = String.fromEnvironment('GEMINI_API_KEY', defaultValue: '');
+    if (fallback.isNotEmpty) {
+      debugPrint('--- SummaryService: Loaded GEMINI_API_KEY from dart-define ---');
+    }
+    return fallback;
   }
 
   static Future<String> summarize(String entryText, {String? apiKey}) async {
@@ -24,8 +32,9 @@ class SummaryService {
       return 'No content to summarize.';
     }
 
+    // Using gemini-pro which is universally supported across all Google AI Studio free tier keys
     final url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=$key',
+      'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=$key',
     );
 
     final response = await http.post(
