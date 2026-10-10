@@ -19,7 +19,7 @@ class SummaryService {
     if (fallback.isNotEmpty) {
       debugPrint('--- SummaryService: Loaded GEMINI_API_KEY from dart-define ---');
     }
-    return fallback;
+      return fallback;
   }
 
   static Future<String> summarize(String entryText, {String? apiKey}) async {
@@ -32,9 +32,9 @@ class SummaryService {
       return 'No content to summarize.';
     }
 
-    // Using gemini-pro which is universally supported across all Google AI Studio free tier keys
+    // Using gemini-3.5-flash-lite as configured in Google AI Studio
     final url = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=$key',
+      'https://generativelanguage.googleapis.com/v1/models/gemini-3.5-flash-lite:generateContent?key=$key',
     );
 
     final response = await http.post(
