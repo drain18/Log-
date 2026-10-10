@@ -7,6 +7,8 @@ env.json
 *.jks
 serviceAccountKey.json
 google-services.json.bak
+*.log
+
 
 # Flutter / Dart
 .dart_tool/
