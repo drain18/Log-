@@ -1,8 +1,8 @@
 # Demo video
 
-**File:** [Log! Video Demo](https://drive.google.com/file/d/1ZbcKdBtEy651m49e7QBpiw95tm__S0xI/view?usp=sharing)
-**Length:** 1 minute and 14 seconds
-**Recorded on:** Web view of Log!.
+- **File:** [Log! Video Demo](https://drive.google.com/file/d/1ZbcKdBtEy651m49e7QBpiw95tm__S0xI/view?usp=sharing)
+- **Length:** 1 minute and 14 seconds
+- **Recorded on:** Web view of Log!.
 
 ## What it shows
 
