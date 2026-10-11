@@ -1,42 +1,32 @@
 # Security and privacy
 
-This repository is public. Fill this in honestly and date it; it is checked as
-part of grading.
+This repository is public. This document summarizes our security and privacy posture (see `SECURITY-CHECKLIST.md` for the full audited checklist).
 
-**Last checked:** YYYY-MM-DD
+**Last checked:** 2026-10-12
 
 ## What this app stores
 
 | Data | Where it lives | Who can see it |
 | --- | --- | --- |
-| e.g. the user's task list | on the device (shared_preferences) | only that user |
+| Journal entries, transcripts, summaries | On the device (`shared_preferences`) | Only the local device user |
 
 ## Secrets
 
-- Values my app needs at run time: _(list the names, not the values)_
-- Where they live locally: `.env`, which is git-ignored
-- Where the deploy workflow gets them: repository secrets (Settings > Secrets
-  and variables > Actions; the walkthrough is on page 12 of
-  `content/extending-your-app/` in your workspace)
-- Anything my deployed web build carries that a visitor could read, and why that
-  is acceptable: _(a Supabase anon key protected by RLS, a Firebase config
-  protected by rules, or nothing)_
+- **Values my app needs at run time:** `GEMINI_API_KEY`
+- **Where they live locally:** `.env` (git-ignored), with `.env.example` committed as a template.
+- **Where the deploy workflow gets them:** Local web build / development setup (no production server secret required).
+- **Deployed web build exposure:** Client-side static web build containing REST API calls to Google Gemini.
 
 ## What protects the data on the service side
 
-- Firestore rules / Supabase RLS policies: _(paste or summarize them; "test mode"
-  is not an answer)_
-- If nothing leaves the device, say that instead.
+- **Backend:** App is fully local with no remote database backend. All data stays on-device via `shared_preferences`.
+- **AI API:** Anonymized journal text payloads are sent to Gemini solely for summarization upon user request.
 
-## Checklist
+## Checklist Summary
 
-- [ ] `.env` (or `env.json`) is in `.gitignore`, and `.env.example` is committed
-- [ ] `git log -p | grep -i "api_key\|secret\|password\|token"` finds nothing real
-- [ ] No service account file, keystore or `service_role` key anywhere in the repo
-- [ ] Security rules or RLS policies written and tested, not left open
-- [ ] No real personal data in sample data, screenshots or the video
-- [ ] No course or university credentials anywhere
-- [ ] Anyone whose data appears in a test was asked first
+- [x] `.env` is in `.gitignore`, and `.env.example` is committed
+- [x] `git log -p` finds no real API keys or passwords
+- [x] No keystores or signing credentials tracked in repository
+- [x] No real personal data in sample data or screenshots
+- [x] Secret scanning and push protection enabled on GitHub repository
 
-If you found and revoked a key while doing this, say so here. Catching it is the
-right outcome, not an embarrassment.

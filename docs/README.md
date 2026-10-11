@@ -1,10 +1,5 @@
 # Project documentation
 
-Everything about this project that is not code lives here, so the repository is
-the single place your work exists. Nothing is submitted as a separate file: you
-submit **one link: the public repository in your own GitHub account**, and this
-folder is half of what gets read.
-
 | File | What goes in it |
 | --- | --- |
 | [01-proposal.md](01-proposal.md) | the problem, the users, the scope, the storage decision |

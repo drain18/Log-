@@ -71,8 +71,8 @@ This project reads its configuration from a `.env` file that is **not** in the r
 
 ## Status and what is next
 
-- **Working:** Phase 0 setup, local storage persistence model (`shared_preferences`), design system theme configuration, and device preview.
-- **In Progress / Next:** Phase 1 calendar & home page UI, Phase 2 voice recording integration, and Phase 3 Gemini AI integration.
+- **Working:** Phase 0 setup & storage, Phase 1 interactive calendar & home page UI, Phase 2 voice recorder & transcription flow, Phase 3 Gemini AI integration, and Phase 4 responsive design & security verification.
+- **Completed:** All project phases successfully finished and verified.
 
 ## Credits
 

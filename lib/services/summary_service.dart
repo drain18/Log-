@@ -9,7 +9,6 @@ class SummaryService {
     try {
       final envKey = dotenv.env['GEMINI_API_KEY'];
       if (envKey != null && envKey.isNotEmpty) {
-        debugPrint('--- SummaryService: Loaded GEMINI_API_KEY from dotenv (${envKey.substring(0, 4)}...) ---');
         return envKey;
       }
     } catch (e) {
