@@ -43,4 +43,13 @@ class StorageService {
     entries.removeWhere((e) => e.id == id);
     await saveEntries(entries);
   }
+
+  static Future<void> updateEntry(Entry updatedEntry) async {
+    final entries = await loadEntries();
+    final index = entries.indexWhere((e) => e.id == updatedEntry.id);
+    if (index != -1) {
+      entries[index] = updatedEntry;
+      await saveEntries(entries);
+    }
+  }
 }

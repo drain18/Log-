@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:final_project/models/entry.dart';
 import 'package:final_project/services/storage_service.dart';
-import 'package:final_project/services/summary_service.dart';
 import 'package:final_project/widgets/primary_button.dart';
 import 'package:final_project/widgets/bottom_action_bar.dart';
 import 'package:final_project/screens/recorder_screen.dart';
+import 'package:final_project/screens/entry_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -175,123 +175,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _showEntryDetail(Entry entry) {
-    bool isGenerating = false;
-    String? currentSummary = entry.summary;
-    String? errorMessage;
-
-    showDialog(
-      context: context,
-      builder: (context) => StatefulBuilder(
-        builder: (context, setDialogState) {
-          return AlertDialog(
-            backgroundColor: const Color(0xFFF9F7F2),
-            title: Text(
-              'Entry for ${entry.date.month}/${entry.date.day}/${entry.date.year}',
-              style: const TextStyle(color: Color(0xFF2D4B3E)),
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Journal Text:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(entry.text, style: const TextStyle(fontSize: 16)),
-                  const SizedBox(height: 16),
-                  if (currentSummary != null) ...[
-                    const Text(
-                      'AI Summary:',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF8DAA91)),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(currentSummary ?? '', style: const TextStyle(fontStyle: FontStyle.italic)),
-                  ],
-                  if (errorMessage != null) ...[
-                    const SizedBox(height: 8),
-                    Text(errorMessage ?? '', style: const TextStyle(color: Color(0xFFDC2626), fontSize: 12)),
-                  ],
-                  if (isGenerating) ...[
-                    const SizedBox(height: 12),
-                    const Center(child: CircularProgressIndicator(color: Color(0xFF2D4B3E))),
-                  ],
-                ],
-              ),
-            ),
-            actions: [
-              if (currentSummary == null && !isGenerating)
-                TextButton(
-                  onPressed: () async {
-                    setDialogState(() {
-                      isGenerating = true;
-                      errorMessage = null;
-                    });
-                    try {
-                      final summary = await SummaryService.summarize(entry.text);
-                      final updatedEntry = entry.copyWith(summary: summary);
-                      
-                      final entries = await StorageService.loadEntries();
-                      final index = entries.indexWhere((e) => e.id == entry.id);
-                      if (index != -1) {
-                        entries[index] = updatedEntry;
-                        await StorageService.saveEntries(entries);
-                      }
-                      
-                      setDialogState(() {
-                        currentSummary = summary;
-                        isGenerating = false;
-                      });
-                      _loadEntries();
-                    } catch (e) {
-                      setDialogState(() {
-                        errorMessage = e.toString().replaceFirst('Exception: ', '');
-                        isGenerating = false;
-                      });
-                    }
-                  },
-                  child: const Text('Summarize with AI'),
-                ),
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(foregroundColor: const Color(0xFFDC2626)),
-                onPressed: () async {
-                  final confirm = await showDialog<bool>(
-                    context: context,
-                    builder: (ctx) => AlertDialog(
-                      title: const Text('Delete Entry?'),
-                      content: const Text('Are you sure you want to delete this journal entry?'),
-                      actions: [
-                        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
-                        TextButton(
-                          style: TextButton.styleFrom(foregroundColor: const Color(0xFFDC2626)),
-                          onPressed: () => Navigator.pop(ctx, true),
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    ),
-                  );
-
-                  if (confirm == true) {
-                    final targetId = entry.id;
-                    await StorageService.deleteEntry(targetId);
-                    if (!context.mounted) return;
-                    Navigator.pop(context);
-                    _loadEntries();
-                  }
-                },
-                child: const Text('Delete'),
-              ),
-            ],
-          );
-        },
-      ),
+  Future<void> _showEntryDetail(Entry entry) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EntryDetailScreen(entry: entry)),
     );
+    if (result == true) {
+      _loadEntries();
+    }
   }
 
 
